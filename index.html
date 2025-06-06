@@ -1,160 +1,321 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Conectando con un cajero…</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Bonos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src='https://connect.facebook.net/en_US/fbevents.js';
+    s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script');
+    fbq('init', '582357801126295');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=582357801126295&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- End Meta Pixel Code -->
+
   <style>
     body {
-      background-color: #f5f7fa; /* fondo claro suave */
-      font-family: Arial, sans-serif;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    header {
+      margin-top: 30px;
       text-align: center;
-      padding-top: 50px;
-      overflow: hidden;
-      color: #333;
     }
 
-    .popup-bono {
-      font-size: 22px;
-      background: #ff0000;
-      color: #fff;
-      display: inline-block;
-      padding: 15px 25px;
-      border-radius: 15px;
-      margin-bottom: 30px;
-      box-shadow: 0 0 20px #ff0000;
-      animation: slideIn 0.8s ease-out, brillo 1.2s infinite alternate, blurOut 3s ease-out forwards;
+    .logo-text {
+      color: #25d366;
+      font-weight: 700;
+      font-size: 24px;
     }
 
-    @keyframes slideIn {
-      from { transform: translateX(-100%) scale(0.9); opacity: 0; }
-      to { transform: translateX(0) scale(1); opacity: 1; }
+    hr {
+      width: 100%;
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 20px 0;
     }
 
-    @keyframes brillo {
-      from { box-shadow: 0 0 20px #ff0000; }
-      to { box-shadow: 0 0 30px #ff6666; }
+    .verified {
+      text-align: center;
     }
 
-    @keyframes blurOut {
-      0% { filter: blur(0px); opacity: 1; }
-      90% { filter: blur(2px); opacity: 0.8; }
-      100% { filter: blur(5px); opacity: 0.3; }
+    .verified img {
+      border-radius: 50%;
+      margin: 20px 0;
     }
 
-    img.logo {
-      width: 80px;
-      margin-bottom: 20px;
+    .verified .green {
+      color: #25d366;
+      font-weight: 600;
     }
 
-    .mensaje {
-      font-size: 22px;
-      margin-bottom: 15px;
-    }
-
-    .mensaje-secundario {
+    .message {
+      background: #e8f7f0;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
       font-size: 16px;
-      color: #666;
-      margin-bottom: 30px;
     }
 
-    .barra-contenedor {
-      width: 80%;
-      margin: 0 auto;
-      background-color: #ccc;
-      border-radius: 30px;
-      overflow: hidden;
-      height: 20px;
+    .whatsapp-button {
+      background-color: #25D366;
+      color: white;
+      padding: 18px 30px;
+      border-radius: 50px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      border: none;
+      cursor: pointer;
       position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      z-index: 1;
+      min-width: 250px;
     }
 
-    .ficha {
+    .whatsapp-button::before {
+      content: '';
       position: absolute;
-      left: -30px;
-      top: -5px;
-      width: 30px;
-      animation: girar 1.5s infinite linear;
-    }
-
-    @keyframes girar {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .barra-carga {
-      width: 0%;
-      height: 100%;
-      background-color: #25d366;
-      animation: cargar 1.5s linear forwards;
-    }
-
-    @keyframes cargar {
-      from { width: 0%; }
-      to { width: 100%; }
-    }
-
-    .fichas-lluvia {
-      position: fixed;
-      top: -50px;
+      top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
-      z-index: 1;
+      background-color: #128C7E;
+      z-index: -1;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
     }
 
-    .ficha-lluvia {
-      position: absolute;
+    .whatsapp-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px #25D366, 
+                  0 0 25px rgba(37, 211, 102, 0.6),
+                  0 0 35px rgba(37, 211, 102, 0.3);
+    }
+
+    .whatsapp-button:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .whatsapp-button:active {
+      transform: translateY(1px);
+    }
+
+    .whatsapp-button i {
+      margin-right: 10px;
+      font-size: 24px;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+      }
+    }
+
+    .whatsapp-button.pulse {
+      animation: pulse 2s infinite;
+    }
+
+    .clientes {
+      background-color: #2ec4a7;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .trustpilot {
+      font-size: 14px;
+      padding: 8px 15px;
+      border: 1px dashed #999;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .trustpilot img {
+      margin-top: 5px;
+      max-width: 120px;
+    }
+
+    .notificacion {
+      position: fixed;
+      bottom: 110px;
+      left: 20px;
+      background: #111;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      animation: fadeinout 5s infinite;
+    }
+
+    @keyframes fadeinout {
+      0%,100% { opacity: 0; transform: translateY(20px); }
+      10%,90% { opacity: 1; transform: translateY(0); }
+    }
+
+    .notificacion img {
       width: 30px;
-      animation: caer 4s linear infinite;
+      height: 30px;
+      border-radius: 10px;
+      margin-right: 8px;
     }
 
-    @keyframes caer {
-      0% { top: -50px; opacity: 1; }
-      100% { top: 100vh; opacity: 0; }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: linear-gradient(to right, #00d084, #25d366);
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 14px;
     }
 
+    @media (max-width: 600px) {
+      .whatsapp-button {
+        font-size: 16px;
+        padding: 16px 25px;
+        min-width: 220px;
+      }
+      .clientes {
+        font-size: 14px;
+        padding: 12px 18px;
+      }
+      .message {
+        font-size: 14px;
+      }
+    }
   </style>
-
-  <!-- Facebook Pixel -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod ?
-    n.callMethod.apply(n,arguments) : n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    
-    fbq('init', '1426997598619075');
-    fbq('track', 'PageView');
-    fbq('trackCustom', 'ClickWhatsapp');
-
-    setTimeout(function() {
-      window.location.href = 'https://wa.me/5491125043098?text=Quiero%20jugar%20con%20mi%20bono%20de%2020%25';
-    }, 1500);
-  </script>
 </head>
 <body>
-  <div class="popup-bono">🎉 ¡Felicidades! Te ganaste un BONO del 20% 🎰</div>
+  <header>
+    <div class="logo-text">WhatsApp Bonos</div>
+  </header>
 
-  <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
-  
-  <div class="mensaje">Te estamos conectando con un cajero…</div>
-  <div class="mensaje-secundario">No abandones la página, en segundos vas a ser direccionado con nuestro cajero</div>
+  <hr />
 
-  <div class="barra-contenedor">
-    <img class="ficha" src="https://cdn-icons-png.flaticon.com/512/105/105220.png" alt="ficha">
-    <div class="barra-carga"></div>
+  <section class="verified">
+    <a href="https://wa.me/5493521551473" target="_blank" onclick="fbq('trackCustom', 'ClickWhatsApp')">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo" width="50" height="50" />
+    </a>
+    <h2 style="font-size: 20px; margin: 10px 0; display: flex; align-items: center; justify-content: center;">
+      <img src="https://i.imgur.com/U0zRzjN.png" 
+           alt="verificado" 
+           style="width: 20px; height: 20px; margin-right: 8px;" />
+      <b>Plataforma Verificada</b>
+    </h2>
+    <p class="green">Casino de Confianza</p>
+  </section>
+
+  <div class="message">
+    Te estamos conectando con nuestro equipo vía WhatsApp.
   </div>
 
-  <div class="fichas-lluvia">
-    <img src="https://cdn-icons-png.flaticon.com/512/105/105220.png" class="ficha-lluvia" style="left:10%; animation-delay: 0s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/105/105220.png" class="ficha-lluvia" style="left:40%; animation-delay: 0.5s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/105/105220.png" class="ficha-lluvia" style="left:70%; animation-delay: 1s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/105/105220.png" class="ficha-lluvia" style="left:85%; animation-delay: 1.3s;">
+  <a class="whatsapp-button pulse" 
+     href="https://wa.me/5491125043098?text=Quiero%20mi%20bono%20del%2030%25" 
+     target="_blank"
+     onclick="fbq('trackCustom', 'ClickWhatsApp')">
+    <i class="fab fa-whatsapp"></i> ¡QUIERO MI BONO!
+  </a>
+
+  <div class="clientes">
+    👥 +10.000 CLIENTES GANANDO todos los días
   </div>
+
+  <div class="trustpilot">
+    "Excelente" ⭐⭐⭐⭐⭐ Calificación 4.9/5 en Trustpilot<br/>
+    <img src="https://logowik.com/content/uploads/images/trustpilot-stars9095.jpg" alt="Trustpilot" />
+  </div>
+
+  <div class="notificacion" id="notificacion">
+    <img src="https://cdn-icons-png.flaticon.com/512/854/854894.png" alt="usuario" />
+    <div id="noti-text">
+      <strong>Mario</strong><br />
+      🎁 Reclamó su premio de $10.000<br />
+      📍 Desde Buenos Aires • hace 1 min
+    </div>
+  </div>
+
+  <div class="footer">
+    🎁 BONO ACTIVO - ¡Solicítalo ahora por WhatsApp!
+  </div>
+
+  <script>
+    const premios = [
+      { nombre: "Mario", monto: "$10.000", ciudad: "Buenos Aires", tiempo: "hace 1 min" },
+      { nombre: "Laura", monto: "$5.500", ciudad: "Córdoba", tiempo: "hace 2 min" },
+      { nombre: "Carlos", monto: "$8.200", ciudad: "Rosario", tiempo: "hace 3 min" },
+      { nombre: "Sofía", monto: "$15.000", ciudad: "Mendoza", tiempo: "hace 4 min" },
+      { nombre: "Pedro", monto: "$7.300", ciudad: "Tucumán", tiempo: "hace 5 min" },
+      { nombre: "Ana", monto: "$12.500", ciudad: "Salta", tiempo: "hace 6 min" },
+    ];
+
+    let indice = 0;
+    function actualizarNotificacion() {
+      const notiText = document.getElementById("noti-text");
+      const premio = premios[indice % premios.length];
+      notiText.innerHTML = `
+        <strong>${premio.nombre}</strong><br />
+        🎁 Reclamó su premio de ${premio.monto}<br />
+        📍 Desde ${premio.ciudad} • ${premio.tiempo}
+      `;
+      indice++;
+    }
+
+    setInterval(actualizarNotificacion, 10000);
+    actualizarNotificacion();
+
+    const whatsappBtn = document.querySelector('.whatsapp-button');
+    if(whatsappBtn) {
+      whatsappBtn.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.05)';
+      });
+      whatsappBtn.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+      });
+    }
+  </script>
 </body>
 </html>
-
